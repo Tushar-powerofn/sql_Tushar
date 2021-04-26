@@ -1,0 +1,31 @@
+create table
+usecase3
+(TIME timestamp not null,
+DEVICE varchar(2) not null,
+CONSUMPTION decimal(4,3) not null
+)
+;
+
+Answere:1
+load data local infile '/home/rakesh/usecase.csv' into table usecase3 fields terminated by '
+,'  ignore 1 rows;
+
+
+Answere:2
+select TIME,DEVICE,count(TIME) from usecase3 group by DEVICE,TIME having count(TIME)>1;
+
+
+Answere:3
+with MYTABLE as ( select TIME as minn,row_number() over (partition by HOUR(TIME) order by TI
+ME)-MINUTE(TIME) as rowdif from usecase3 where DEVICE='D2') select timestampadd(MINUTE,rowdif-1,minn) from MYTABLE
+where rowdif!=1;
+
+
+Answere:4
+select DEVICE,HOUR(TIME),sum(CONSUMPTION) from usecase3 group by (HOUR(TIME));
+
+
+Answere:5
+select DEVICE,HOUR(TIME),max(CONSUMPTION) from usecase3  group by DEVICE,HOUR(TIME);
+select DEVICE,CONSUMPTION from usecase3 where CONSUMPTION=(select max(CONSUMPTION) from usecase3) group by DEVICE;
+Shared in
