@@ -1,0 +1,26 @@
+create table STUDENT(ID char(4)NOT NULL,NAME varchar(20)NOT NULL,DEPARTMENT char(3)NOT NULL,CGPA decimal(2,1)NOT NULL,PRIMARY key(ID));
+create table COMPANY(ID char(4)NOT NULL,NAME varchar(20)NOT NULL,LOCATION varchar(20)NOT NULL,INTERVIEW_DATE date NOT NULL,Primary key(ID));
+create table PLACEMENTS (S_ID char(4)NOT NULL,C_ID char(4)NOT NULL,PACKAGE BIGINT(9)NOT NULL,Foreign key (S_ID)references STUDENT(ID),Foreign key(C_ID)references COMPANY(ID));
+
+Answer 1:
+select s.NAME as STUDENT,c.NAME as COMPANY,PACKAGE from STUDENT s join COMPANY c join PLACEMENTS p where s. ID=p.S_ID and c.ID=p.C_ID and PACKAGE=(select max(PACKAGE)from PLACEMENTS);
+
+Answer 3:
+select COMPANY.NAME as COMPANY,COUNT(COMPANY.NAME) as NO_OF_STUDENTS from COMPANY join PLACEMENTS where COMPANY.ID=PLACEMENTS.C_ID group by COMPANY.NAME;
+
+Answer 4:
+select monthname(interview_date) as Month ,name as Company from company where monthname(interview_date)='September';
+
+Answer 5:
+select NAME, INTERVIEW_DATE as DATE from COMPANY;
+
+Answer 7:
+select STUDENT.NAME,STUDENT.DEPARTMENT,STUDENT.CGPA from STUDENT join PLACEMENTS on STUDENT.ID not in (select PLACEMENTS.S_ID from PLACEMENTS) and CGPA>=9 group by STUDENT.NAME;
+
+Answer 8:
+select NAME,LOCATION from COMPANY where LOCATION like 'B%';
+
+
+select STUDENT.NAME ,COMPANY.NAME from STUDENT join PLACEME
+NTS on STUDENT.ID=PLACEMENTS.S_ID join COMPANY on PLACEMENTS.C_ID=COMPANY.ID  where
+STUDENT.ID in(select S_ID from PLACEMENTS group by S_ID having count(*)>1);
